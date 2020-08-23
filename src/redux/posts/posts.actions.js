@@ -6,11 +6,11 @@ export const addPost = (newPostData) => ({
 })
 
 export const updatePost = (postId, updatedPostData) => ({
-  type: ADD_POST,
+  type: UPDATE_POST,
   payload: { postId, updatedPostData },
 })
 
-export const removePost = (postId) => ({
-  type: ADD_POST,
+export const deletePost = (postId) => ({
+  type: DELETE_POST,
   payload: postId,
 })

@@ -8,16 +8,16 @@ import Button from "react-bootstrap/Button"
 import Card from "react-bootstrap/Card"
 import Modal from "react-bootstrap/Modal"
 import PostForm from "../../components/PostForm"
-import { removePost } from "../../redux/posts/posts.actions"
+import { deletePost } from "../../redux/posts/posts.actions"
 import { selectAllPosts } from "../../redux/posts/posts.selector"
 
-function PostsPage({ removePost }) {
+function PostsPage({ deletePost }) {
   const { posts } = useSelector(
     createStructuredSelector({ posts: selectAllPosts })
   )
   const [openAddModal, setOpenAddModal] = useState(false)
   const [openEditModal, setOpenEditModal] = useState(false)
-  const [selectedContact, setSelectedContact] = useState({})
+  const [selectedPost, setSelectedPost] = useState({})
 
   const openModal = () => {
     setOpenAddModal(true)
@@ -32,8 +32,8 @@ function PostsPage({ removePost }) {
     setOpenAddModal(false)
   }
 
-  const editContact = (contact) => {
-    setSelectedContact(contact)
+  const editPost = (post) => {
+    setSelectedPost(post)
     setOpenEditModal(true)
   }
 
@@ -42,7 +42,7 @@ function PostsPage({ removePost }) {
   }
 
   const deleteSelectedContact = (postId) => {
-    removePost(postId)
+    deletePost(postId)
   }
 
   return (
@@ -68,7 +68,7 @@ function PostsPage({ removePost }) {
           <PostForm
             edit={true}
             onSave={closeModal.bind(this)}
-            contact={selectedContact}
+            post={selectedPost}
             onCancelEdit={cancelEditModal}
           />
         </Modal.Body>
@@ -85,8 +85,9 @@ function PostsPage({ removePost }) {
                 <Card.Title>{post.title}</Card.Title>
                 <Card.Text>{post.body}</Card.Text>
                 <Button
+                  className="posts-page__edit-btn"
                   variant="outline-primary"
-                  onClick={editContact.bind(this, post)}
+                  onClick={() => editPost(post)}
                 >
                   Edit
                 </Button>
@@ -106,7 +107,7 @@ function PostsPage({ removePost }) {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  removePost: (postId) => dispatch(removePost(postId)),
+  deletePost: (postId) => dispatch(deletePost(postId)),
 })
 
 export default connect(undefined, mapDispatchToProps)(PostsPage)

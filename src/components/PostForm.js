@@ -28,15 +28,16 @@ function PostForm({
 }) {
   const COUNTRIES = ["Bangladesh", "USA"]
   const handleSubmit = async (values) => {
-    console.log({ values })
     const isValid = await schema.validate(values)
     if (!isValid) {
       return
     }
-
+    console.log({ edit })
     if (!edit) {
+      console.log("adding post")
       addPost(values)
     } else {
+      console.log("updating post")
       updatePost(post.id, values)
     }
 
