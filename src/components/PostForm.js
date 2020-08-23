@@ -54,17 +54,21 @@ function PostForm({
 
     onSave()
   }
-  console.log({ categories: post.categories })
+
   const formik = useFormik({
     initialValues: {
       title: post.title,
       body: post.body,
-      categories: post.categories,
+      categories: post.categories || [],
     },
     onSubmit: handleSubmit,
   })
 
   const handleChange = (selectedOption) => {
+    if (!selectedOption) {
+      return formik.setFieldValue("categories", [])
+    }
+
     const selectedValues = selectedOption.map(({ value }) => value)
 
     if (selectedValues.includes("createCategory")) {
