@@ -63,11 +63,11 @@ function CategoryForm({
               placeholder="Category Name"
               value={formik.values.name}
               onChange={formik.handleChange}
-              // isInvalid={touched.title && errors.title}
+              isInvalid={formik.touched.name && formik.errors.name}
             />
-            {/* <Form.Control.Feedback type="invalid">
-              {errors.title}
-            </Form.Control.Feedback> */}
+            <Form.Control.Feedback type="invalid">
+              {formik.errors.name}
+            </Form.Control.Feedback>
           </Form.Group>
         </Form.Row>
         <Form.Row>
@@ -80,11 +80,13 @@ function CategoryForm({
               name="description"
               value={formik.values.description}
               onChange={formik.handleChange}
-              // isInvalid={touched.body && errors.body}
+              isInvalid={
+                formik.touched.description && formik.errors.description
+              }
             />
-            {/* <Form.Control.Feedback type="invalid">
-              {errors.body}
-            </Form.Control.Feedback> */}
+            <Form.Control.Feedback type="invalid">
+              {formik.errors.description}
+            </Form.Control.Feedback>
           </Form.Group>
         </Form.Row>
         <Button type="submit" style={{ marginRight: "10px" }}>

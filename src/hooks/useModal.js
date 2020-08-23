@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import { useState } from "react"
 
 function useModal(openAddModalDefault = false, openEditModalDefault = false) {
   const [openAddModal, setOpenAddModal] = useState(openAddModalDefault)

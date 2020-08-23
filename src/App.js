@@ -1,6 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css"
 import React from "react"
-import { Router, Route, Redirect } from "react-router-dom"
+import { Router, Route } from "react-router-dom"
 import HomePage from "./pages/Home"
 import PostsPage from "./pages/Posts"
 import CategoriesPage from "./pages/Categories"

@@ -87,11 +87,11 @@ function PostForm({
               placeholder="post title"
               value={formik.values.title}
               onChange={formik.handleChange}
-              // isInvalid={touched.title && errors.title}
+              isInvalid={formik.touched.title && formik.errors.title}
             />
-            {/* <Form.Control.Feedback type="invalid">
-              {errors.title}
-            </Form.Control.Feedback> */}
+            <Form.Control.Feedback type="invalid">
+              {formik.errors.title}
+            </Form.Control.Feedback>
           </Form.Group>
         </Form.Row>
         <Form.Row>
@@ -114,11 +114,11 @@ function PostForm({
               name="body"
               value={formik.values.body}
               onChange={formik.handleChange}
-              // isInvalid={touched.body && errors.body}
+              isInvalid={formik.touched.body && formik.errors.body}
             />
-            {/* <Form.Control.Feedback type="invalid">
-              {errors.body}
-            </Form.Control.Feedback> */}
+            <Form.Control.Feedback type="invalid">
+              {formik.errors.body}
+            </Form.Control.Feedback>
           </Form.Group>
         </Form.Row>
         <Button type="submit" style={{ marginRight: "10px" }}>
