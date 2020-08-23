@@ -10,27 +10,22 @@ import Modal from "react-bootstrap/Modal"
 import PostForm from "../../components/PostForm"
 import { deletePost } from "../../redux/posts/posts.actions"
 import { selectAllPosts } from "../../redux/posts/posts.selector"
+import useModal from "../../hooks/useModal"
 
 function PostsPage({ deletePost }) {
   const { posts } = useSelector(
     createStructuredSelector({ posts: selectAllPosts })
   )
-  const [openAddModal, setOpenAddModal] = useState(false)
-  const [openEditModal, setOpenEditModal] = useState(false)
+  const {
+    openAddModal,
+    openEditModal,
+    openModal,
+    closeModal,
+    cancelAddModal,
+    setOpenEditModal,
+  } = useModal(false, false)
+
   const [selectedPost, setSelectedPost] = useState({})
-
-  const openModal = () => {
-    setOpenAddModal(true)
-  }
-
-  const closeModal = () => {
-    setOpenAddModal(false)
-    setOpenEditModal(false)
-  }
-
-  const cancelAddModal = () => {
-    setOpenAddModal(false)
-  }
 
   const editPost = (post) => {
     setSelectedPost(post)
@@ -93,7 +88,7 @@ function PostsPage({ deletePost }) {
                 </Button>
                 <Button
                   variant="outline-primary"
-                  onClick={deleteSelectedContact.bind(this, post.id)}
+                  onClick={() => deleteSelectedContact(post.id)}
                 >
                   Delete
                 </Button>

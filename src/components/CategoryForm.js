@@ -8,34 +8,35 @@ import InputGroup from "react-bootstrap/InputGroup"
 import Button from "react-bootstrap/Button"
 import * as yup from "yup"
 import PropTypes from "prop-types"
-import { addPost, updatePost } from "../redux/posts/posts.actions"
+import {
+  addCategory,
+  updateCategory,
+} from "../redux/categories/categories.actions"
 
 const schema = yup.object({
-  title: yup.string().required("Title is required"),
-  categories: yup.string().required("Categories is required"),
-  body: yup.string(),
+  name: yup.string().required("Name is required"),
+  description: yup.string(),
 })
 
-function PostForm({
-  addPost,
-  updatePost,
+function CategoryForm({
+  addCategory,
+  updateCategory,
   edit,
   onSave,
-  post,
+  category,
   onCancelAdd,
   onCancelEdit,
 }) {
-  const COUNTRIES = ["Bangladesh", "USA"]
   const handleSubmit = async (values) => {
     const isValid = await schema.validate(values)
     if (!isValid) {
       return
     }
-
     if (!edit) {
-      addPost(values)
+      console.log("adding new category")
+      addCategory(values)
     } else {
-      updatePost(post.id, values)
+      updateCategory(category.id, values)
     }
 
     onSave()
@@ -43,9 +44,8 @@ function PostForm({
 
   const formik = useFormik({
     initialValues: {
-      title: post.title,
-      body: post.body,
-      categories: "Bangladesh",
+      name: category.name,
+      description: category.description,
     },
     onSubmit: handleSubmit,
   })
@@ -55,12 +55,12 @@ function PostForm({
       <Form noValidate onSubmit={formik.handleSubmit}>
         <Form.Row>
           <Form.Group as={Col} md="12" controlId="firstName">
-            <Form.Label>Title</Form.Label>
+            <Form.Label>Name</Form.Label>
             <Form.Control
-              name="title"
+              name="name"
               type="text"
-              placeholder="post title"
-              value={formik.values.title}
+              placeholder="Category Name"
+              value={formik.values.name}
               onChange={formik.handleChange}
               // isInvalid={touched.title && errors.title}
             />
@@ -70,34 +70,14 @@ function PostForm({
           </Form.Group>
         </Form.Row>
         <Form.Row>
-          <Form.Group as={Col} md="12" controlId="categories">
-            <Form.Label>Categories</Form.Label>
-            <Form.Control
-              as="select"
-              placeholder="Add Categories"
-              name="categories"
-              onChange={formik.handleChange}
-              value={formik.values.categories}
-              // isInvalid={touched.categories && errors.categories}
-            >
-              {COUNTRIES.map((c) => (
-                <option key={c} value={c}>
-                  {c}
-                </option>
-              ))}
-            </Form.Control>
-            {/* <Form.Control.Feedback type="invalid">
-              {errors.category}
-            </Form.Control.Feedback> */}
-          </Form.Group>
           <Form.Group as={Col} md="12" controlId="body">
-            <Form.Label>Body</Form.Label>
+            <Form.Label>Description</Form.Label>
             <Form.Control
               as="textarea"
               rows="3"
-              placeholder="Post Body"
-              name="body"
-              value={formik.values.body}
+              placeholder="Category Description"
+              name="description"
+              value={formik.values.description}
               onChange={formik.handleChange}
               // isInvalid={touched.body && errors.body}
             />
@@ -117,26 +97,25 @@ function PostForm({
   )
 }
 
-PostForm.defaultProps = {
-  post: {
-    title: "",
-    body: "",
-    categories: [],
+CategoryForm.defaultProps = {
+  category: {
+    name: "",
+    description: "",
   },
 }
 
-PostForm.propTypes = {
+CategoryForm.propTypes = {
   edit: PropTypes.bool,
   onSave: PropTypes.func,
   onCancelAdd: PropTypes.func,
   onCancelEdit: PropTypes.func,
-  post: PropTypes.object,
+  category: PropTypes.object,
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  addPost: (newPostData) => dispatch(addPost(newPostData)),
-  updatePost: (postId, updatedPostData) =>
-    dispatch(updatePost(postId, updatedPostData)),
+  addCategory: (newCategoryData) => dispatch(addCategory(newCategoryData)),
+  updateCategory: (categoryId, updatedCategoryData) =>
+    dispatch(updateCategory(categoryId, updatedCategoryData)),
 })
 
-export default connect(undefined, mapDispatchToProps)(PostForm)
+export default connect(undefined, mapDispatchToProps)(CategoryForm)

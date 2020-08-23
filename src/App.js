@@ -16,7 +16,7 @@ function App() {
     <div className="App">
       <Router history={history}>
         <Navbar bg="primary" expand="lg" variant="dark">
-          <Navbar.Brand href="#home">Address Book App</Navbar.Brand>
+          <Navbar.Brand href="#home">Blog App</Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ml-auto">
