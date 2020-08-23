@@ -1,11 +1,10 @@
 import { createSelector } from "reselect"
 
-const selectPosts = (state) => state.categoriesStore.categories
+const selectCategory = (state) => state.categoriesStore.categories
+const selectCategoryId = (state, categoryId) => categoryId
 
-export const selectAllCategories = createSelector([selectPosts], (categories) =>
-  Object.values(categories)
-)
-
-export const selectCategoryIds = createSelector([selectPosts], (categories) =>
-  Object.keys(categories)
+export const selectCategoryById = createSelector(
+  [selectCategory, selectCategoryId],
+  (categories, categoryId) =>
+    categories.find((category) => category.id === categoryId)
 )

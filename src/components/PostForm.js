@@ -1,10 +1,10 @@
-import React, { useReducer } from "react"
+import React from "react"
+import Select from "react-select"
 import { connect } from "react-redux"
 import { useSelector } from "react-redux"
 import { useFormik } from "formik"
 import Form from "react-bootstrap/Form"
 import Col from "react-bootstrap/Col"
-import InputGroup from "react-bootstrap/InputGroup"
 import Button from "react-bootstrap/Button"
 import * as yup from "yup"
 import PropTypes from "prop-types"
@@ -12,7 +12,7 @@ import { addPost, updatePost } from "../redux/posts/posts.actions"
 
 const schema = yup.object({
   title: yup.string().required("Title is required"),
-  categories: yup.string().required("Categories is required"),
+  categories: yup.array().nullable(),
   body: yup.string(),
 })
 
@@ -24,8 +24,22 @@ function PostForm({
   post,
   onCancelAdd,
   onCancelEdit,
+  openCategoryModal,
 }) {
-  const COUNTRIES = ["Bangladesh", "USA"]
+  const { categories } = useSelector((state) => state.categoriesStore)
+
+  const getOptions = () => {
+    const options = categories.map((category) => ({
+      value: category.id,
+      label: category.name,
+    }))
+
+    return [
+      { value: "createCategory", label: "Create New Category" },
+      ...options,
+    ]
+  }
+
   const handleSubmit = async (values) => {
     const isValid = await schema.validate(values)
     if (!isValid) {
@@ -40,15 +54,26 @@ function PostForm({
 
     onSave()
   }
-
+  console.log({ categories: post.categories })
   const formik = useFormik({
     initialValues: {
       title: post.title,
       body: post.body,
-      categories: "Bangladesh",
+      categories: post.categories,
     },
     onSubmit: handleSubmit,
   })
+
+  const handleChange = (selectedOption) => {
+    const selectedValues = selectedOption.map(({ value }) => value)
+
+    if (selectedValues.includes("createCategory")) {
+      openCategoryModal()
+      return
+    }
+
+    formik.setFieldValue("categories", selectedOption)
+  }
 
   return (
     <div className="form">
@@ -72,23 +97,13 @@ function PostForm({
         <Form.Row>
           <Form.Group as={Col} md="12" controlId="categories">
             <Form.Label>Categories</Form.Label>
-            <Form.Control
-              as="select"
-              placeholder="Add Categories"
+            <Select
+              isMulti
               name="categories"
-              onChange={formik.handleChange}
               value={formik.values.categories}
-              // isInvalid={touched.categories && errors.categories}
-            >
-              {COUNTRIES.map((c) => (
-                <option key={c} value={c}>
-                  {c}
-                </option>
-              ))}
-            </Form.Control>
-            {/* <Form.Control.Feedback type="invalid">
-              {errors.category}
-            </Form.Control.Feedback> */}
+              onChange={handleChange}
+              options={getOptions()}
+            />
           </Form.Group>
           <Form.Group as={Col} md="12" controlId="body">
             <Form.Label>Body</Form.Label>

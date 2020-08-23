@@ -1,10 +1,9 @@
-import React, { useReducer } from "react"
+import React from "react"
+import { v4 as uuidv4 } from "uuid"
 import { connect } from "react-redux"
-import { useSelector } from "react-redux"
 import { useFormik } from "formik"
 import Form from "react-bootstrap/Form"
 import Col from "react-bootstrap/Col"
-import InputGroup from "react-bootstrap/InputGroup"
 import Button from "react-bootstrap/Button"
 import * as yup from "yup"
 import PropTypes from "prop-types"
@@ -26,6 +25,7 @@ function CategoryForm({
   category,
   onCancelAdd,
   onCancelEdit,
+  onNewCategoryAdd,
 }) {
   const handleSubmit = async (values) => {
     const isValid = await schema.validate(values)
@@ -33,8 +33,9 @@ function CategoryForm({
       return
     }
     if (!edit) {
-      console.log("adding new category")
+      values.id = uuidv4()
       addCategory(values)
+      onNewCategoryAdd(values)
     } else {
       updateCategory(category.id, values)
     }

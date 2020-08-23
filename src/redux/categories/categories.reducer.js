@@ -1,5 +1,4 @@
 import _ from "lodash"
-import { v4 as uuidv4 } from "uuid"
 import {
   ADD_CATEGORY,
   UPDATE_CATEGORY,
@@ -7,7 +6,8 @@ import {
 } from "./categories.types"
 
 const INITIAL_STATE = {
-  categories: {},
+  categories: [],
+  lastAddedCategory: {},
 }
 
 const categoryReducer = (state = INITIAL_STATE, { type, payload }) => {
@@ -19,34 +19,40 @@ const categoryReducer = (state = INITIAL_STATE, { type, payload }) => {
 }
 
 function addCategory(newState, newCategoryData) {
-  console.log(newCategoryData)
-  const id = uuidv4()
   const newCategory = {
-    id,
+    id: newCategoryData.id,
     name: newCategoryData.name,
     description: newCategoryData.description,
-    posts: [],
+    posts: []
   }
 
-  newState.categories[id] = newCategory
+  newState.categories.push(newCategory)
+  newState.lastAddedCategory = newCategory
 
   return newState
 }
 
 function updateCategory(newState, { categoryId, updatedCategoryData }) {
-  const oldCategory = newState.categories[categoryId]
+  const index = newState.categories.findIndex(
+    (category) => category.id === categoryId
+  )
+  const oldCategory = newState.categories[index]
   const updatedCategory = {
     ...oldCategory,
     ...updatedCategoryData,
   }
 
-  newState.categories[categoryId] = updatedCategory
+  newState.categories[index] = updatedCategory
 
   return newState
 }
 
 function deleteCategory(newState, categoryId) {
-  delete newState.categories[categoryId]
+  const index = newState.categories.findIndex(
+    (category) => category.id === categoryId
+  )
+
+  delete newState.categories[index]
 
   return newState
 }

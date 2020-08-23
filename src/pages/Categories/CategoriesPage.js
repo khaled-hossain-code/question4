@@ -9,13 +9,10 @@ import Table from "react-bootstrap/Table"
 import Modal from "react-bootstrap/Modal"
 import CategoryForm from "../../components/CategoryForm"
 import { deleteCategory } from "../../redux/categories/categories.actions"
-import { selectAllCategories } from "../../redux/categories/categories.selector"
 import useModal from "../../hooks/useModal"
 
 function CategoriesPage({ deleteCategory }) {
-  const { categories } = useSelector(
-    createStructuredSelector({ categories: selectAllCategories })
-  )
+  const { categories } = useSelector((state) => state.categoriesStore)
   const {
     openAddModal,
     openEditModal,

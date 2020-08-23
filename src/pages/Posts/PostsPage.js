@@ -1,6 +1,5 @@
-import React, { useReducer } from "react"
+import React, { useState, useEffect } from "react"
 import { connect } from "react-redux"
-import { useState, useEffect } from "react"
 import { useSelector } from "react-redux"
 import { createStructuredSelector } from "reselect"
 import ButtonToolbar from "react-bootstrap/ButtonToolbar"
@@ -8,6 +7,7 @@ import Button from "react-bootstrap/Button"
 import Card from "react-bootstrap/Card"
 import Modal from "react-bootstrap/Modal"
 import PostForm from "../../components/PostForm"
+import CategoryForm from "../../components/CategoryForm"
 import { deletePost } from "../../redux/posts/posts.actions"
 import { selectAllPosts } from "../../redux/posts/posts.selector"
 import useModal from "../../hooks/useModal"
@@ -23,6 +23,12 @@ function PostsPage({ deletePost }) {
     closeModal,
     cancelAddModal,
     setOpenEditModal,
+  } = useModal(false, false)
+  const {
+    openAddModal: openCategoryAddModal,
+    openModal: openCategoryModal,
+    closeModal: closeCategoryModal,
+    cancelAddModal: cancelCategoryAddModal,
   } = useModal(false, false)
 
   const [selectedPost, setSelectedPost] = useState({})
@@ -40,36 +46,23 @@ function PostsPage({ deletePost }) {
     deletePost(postId)
   }
 
+  const handleNewCategoryAdd = (values) => {
+    setSelectedPost({
+      ...selectedPost,
+      categories: [
+        ...selectedPost.categories,
+        { label: values.name, value: values.id },
+      ],
+    })
+  }
+
   return (
     <div className="posts-page">
       <h1>Posts</h1>
-      <Modal show={openAddModal} onHide={closeModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>Add Post</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <PostForm
-            edit={false}
-            onSave={closeModal.bind(this)}
-            onCancelAdd={cancelAddModal}
-          />
-        </Modal.Body>
-      </Modal>
-      <Modal show={openEditModal} onHide={closeModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>Edit Post</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <PostForm
-            edit={true}
-            onSave={closeModal.bind(this)}
-            post={selectedPost}
-            onCancelEdit={cancelEditModal}
-          />
-        </Modal.Body>
-      </Modal>
-      <ButtonToolbar onClick={openModal}>
-        <Button variant="outline-primary">Add Post</Button>
+      <ButtonToolbar>
+        <Button onClick={openModal} variant="outline-primary">
+          Add Post
+        </Button>
       </ButtonToolbar>
       <br />
       <div className="posts-page__posts">
@@ -97,6 +90,46 @@ function PostsPage({ deletePost }) {
           </React.Fragment>
         ))}
       </div>
+      <Modal show={openAddModal} onHide={closeModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Add Post</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <PostForm
+            edit={false}
+            onSave={closeModal.bind(this)}
+            onCancelAdd={cancelAddModal}
+            openCategoryModal={openCategoryModal}
+          />
+        </Modal.Body>
+      </Modal>
+      <Modal show={openEditModal} onHide={closeModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Edit Post</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <PostForm
+            edit={true}
+            onSave={closeModal.bind(this)}
+            post={selectedPost}
+            onCancelEdit={cancelEditModal}
+            openCategoryModal={openCategoryModal}
+          />
+        </Modal.Body>
+      </Modal>
+      <Modal show={openCategoryAddModal} onHide={closeCategoryModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Add Category</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <CategoryForm
+            onNewCategoryAdd={handleNewCategoryAdd}
+            edit={false}
+            onSave={closeCategoryModal}
+            onCancelAdd={cancelCategoryAddModal}
+          />
+        </Modal.Body>
+      </Modal>
     </div>
   )
 }
