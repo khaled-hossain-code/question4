@@ -1,0 +1,14 @@
+.posts-page {
+  padding: 20px;
+
+  &__posts {
+    display: flex;
+  }
+
+  .post {
+    &__card {
+      flex-basis: 30%;
+      margin-right: 2rem;
+    }
+  }
+}
